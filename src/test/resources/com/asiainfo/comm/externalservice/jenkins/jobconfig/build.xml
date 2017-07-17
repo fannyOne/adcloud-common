@@ -1,0 +1,60 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<project>
+    <actions/>
+    <description>adcloud后台工程-开发环境-代码编译</description>
+    <keepDependencies>false</keepDependencies>
+    <properties>
+        <com.tikal.hudson.plugins.notification.HudsonNotificationProperty plugin="notification@1.10">
+            <endpoints>
+                <com.tikal.hudson.plugins.notification.Endpoint>
+                    <protocol>HTTP</protocol>
+                    <format>JSON</format>
+                    <url>http://10.73.141.207:8090/jobnotification</url>
+                    <event>completed</event>
+                    <timeout>30000</timeout>
+                    <loglines>-1</loglines>
+                </com.tikal.hudson.plugins.notification.Endpoint>
+                <com.tikal.hudson.plugins.notification.Endpoint>
+                    <protocol>HTTP</protocol>
+                    <format>JSON</format>
+                    <url>http://10.73.141.207:8090/jobnotification</url>
+                    <event>started</event>
+                    <timeout>30000</timeout>
+                    <loglines>-1</loglines>
+                </com.tikal.hudson.plugins.notification.Endpoint>
+            </endpoints>
+        </com.tikal.hudson.plugins.notification.HudsonNotificationProperty>
+    </properties>
+    <scm class="hudson.scm.NullSCM"/>
+    <canRoam>true</canRoam>
+    <disabled>false</disabled>
+    <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
+    <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
+    <triggers>
+        <jenkins.triggers.ReverseBuildTrigger>
+            <spec></spec>
+            <upstreamProjects>ADCloudBE-dev-down</upstreamProjects>
+            <threshold>
+                <name>SUCCESS</name>
+                <ordinal>0</ordinal>
+                <color>BLUE</color>
+                <completeBuild>true</completeBuild>
+            </threshold>
+        </jenkins.triggers.ReverseBuildTrigger>
+    </triggers>
+    <concurrentBuild>false</concurrentBuild>
+    <builders>
+        <hudson.tasks.Shell>
+            <command>cd ../ADCloudBE-dev-down
+                pwd
+                ls -al
+
+                export JAVA_HOME=~/jdk1.8.0_91
+                mvn -v
+                mvn clean
+                mvn compile
+
+            </command>
+        </hudson.tasks.Shell>
+    </builders>
+</project>

@@ -1,0 +1,67 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<project>
+    <actions/>
+    <description>adcloud后台工程-开发环境-代码下载</description>
+    <keepDependencies>false</keepDependencies>
+    <properties>
+        <com.tikal.hudson.plugins.notification.HudsonNotificationProperty plugin="notification@1.10">
+            <endpoints>
+                <com.tikal.hudson.plugins.notification.Endpoint>
+                    <protocol>HTTP</protocol>
+                    <format>JSON</format>
+                    <url>http://10.73.141.207:8090/jobnotification</url>
+                    <event>started</event>
+                    <timeout>30000</timeout>
+                    <loglines>-1</loglines>
+                </com.tikal.hudson.plugins.notification.Endpoint>
+                <com.tikal.hudson.plugins.notification.Endpoint>
+                    <protocol>HTTP</protocol>
+                    <format>JSON</format>
+                    <url>http://10.73.141.207:8090/jobnotification</url>
+                    <event>completed</event>
+                    <timeout>30000</timeout>
+                    <loglines>-1</loglines>
+                </com.tikal.hudson.plugins.notification.Endpoint>
+            </endpoints>
+        </com.tikal.hudson.plugins.notification.HudsonNotificationProperty>
+    </properties>
+    <scm class="hudson.plugins.git.GitSCM" plugin="git@2.4.0">
+        <configVersion>2</configVersion>
+        <userRemoteConfigs>
+            <hudson.plugins.git.UserRemoteConfig>
+                <url>git@20.26.25.47:devops/adcloud-common.git</url>
+            </hudson.plugins.git.UserRemoteConfig>
+        </userRemoteConfigs>
+        <branches>
+            <hudson.plugins.git.BranchSpec>
+                <name>*/dev</name>
+            </hudson.plugins.git.BranchSpec>
+        </branches>
+        <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
+        <submoduleCfg class="list"/>
+        <extensions/>
+    </scm>
+    <canRoam>true</canRoam>
+    <disabled>false</disabled>
+    <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
+    <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
+    <triggers>
+        <hudson.triggers.SCMTrigger>
+            <spec>H/2 * * * *</spec>
+            <ignorePostCommitHooks>false</ignorePostCommitHooks>
+        </hudson.triggers.SCMTrigger>
+    </triggers>
+    <concurrentBuild>false</concurrentBuild>
+    <builders>
+        <hudson.tasks.Shell>
+            <command>git show --name-only
+                mvn install:install-file -DgroupId=ojdbc -DartifactId=ojdbc -Dversion=12 -Dpackaging=jar
+                -Dfile=lib/ojdbc6_12.1.0.2.0.jar -DgeneratePom=true
+                mvn install:install-file -DgroupId=genCode -DartifactId=genCode -Dversion=1 -Dpackaging=jar
+                -Dfile=lib/gencode.jar -DgeneratePom=true
+            </command>
+        </hudson.tasks.Shell>
+    </builders>
+    <publishers/>
+    <buildWrappers/>
+</project>
